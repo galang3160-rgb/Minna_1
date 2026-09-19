@@ -3,14 +3,14 @@
    ========================================================= */
 
 const chapters = [
-  { id: 1, title: "Bab 1", subtitle: "Ready", isAvailable: true, link: "../Bab1/index.html" },
-  { id: 2, title: "Bab 2", subtitle: "Ready", isAvailable: true, link: "../Bab2/index.html" },
-  { id: 3, title: "Bab 3", subtitle: "Ready", isAvailable: true, link: "../Bab3/index.html" },
-  { id: 4, title: "Bab 4", subtitle: "Ready", isAvailable: true, link: "../Bab4/index.html" },
-  { id: 5, title: "Bab 5", subtitle: "Ready", isAvailable: true, link: "../Bab5/index.html" },
-  { id: 6, title: "Bab 6", subtitle: "Ready", isAvailable: true, link: "../Bab6/index.html" },
-  { id: 7, title: "Bab 7", subtitle: "Ready", isAvailable: true, link: "../Bab7/index.html" },
-  { id: 8, title: "Bab 8", subtitle: "Ready", isAvailable: true, link: "../Bab8/index.html" }
+  { id: 1, title: "Bab 1", subtitle: "Ready", isAvailable: true, link: "Bab1/index.html" },
+  { id: 2, title: "Bab 2", subtitle: "Ready", isAvailable: true, link: "Bab2/index.html" },
+  { id: 3, title: "Bab 3", subtitle: "Ready", isAvailable: true, link: "Bab3/index.html" },
+  { id: 4, title: "Bab 4", subtitle: "Ready", isAvailable: true, link: "Bab4/index.html" },
+  { id: 5, title: "Bab 5", subtitle: "Ready", isAvailable: true, link: "Bab5/index.html" },
+  { id: 6, title: "Bab 6", subtitle: "Ready", isAvailable: true, link: "Bab6/index.html" },
+  { id: 7, title: "Bab 7", subtitle: "Ready", isAvailable: true, link: "Bab7/index.html" },
+  { id: 8, title: "Bab 8", subtitle: "Ready", isAvailable: true, link: "Bab8/index.html" }
 ];
 
 function renderChapters() {
