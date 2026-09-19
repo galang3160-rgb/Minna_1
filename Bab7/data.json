@@ -1,0 +1,52 @@
+[
+  { "furigana": "きります", "arti": "Memotong / menggunting" },
+  { "furigana": "おくります", "arti": "Mengirim" },
+  { "furigana": "あげます", "arti": "Memberikan" },
+  { "furigana": "もらいます", "arti": "Menerima" },
+  { "furigana": "かします", "arti": "Meminjamkan" },
+  { "furigana": "かります", "arti": "Meminjam" },
+  { "furigana": "おしえます", "arti": "Mengajar / memberitahu" },
+  { "furigana": "ならいます", "arti": "Belajar dari orang lain" },
+  { "furigana": "かけます", "arti": "Menelepon" },
+
+  { "furigana": "て", "arti": "Tangan" },
+  { "furigana": "はし", "arti": "Sumpit" },
+  { "furigana": "スプーン", "arti": "Sendok" },
+  { "furigana": "ナイフ", "arti": "Pisau" },
+  { "furigana": "フォーク", "arti": "Garpu" },
+  { "furigana": "はさみ", "arti": "Gunting" },
+
+  { "furigana": "パソコン", "arti": "Komputer / PC" },
+  { "furigana": "ケータイ", "arti": "Ponsel / HP" },
+  { "furigana": "メール", "arti": "Email" },
+  { "furigana": "ねんがじょう", "arti": "Kartu tahun baru" },
+  { "furigana": "パンチ", "arti": "Pelubang kertas" },
+  { "furigana": "ホッチキス", "arti": "Stapler" },
+  { "furigana": "セロテープ", "arti": "Selotip" },
+  { "furigana": "けしゴム", "arti": "Penghapus" },
+  { "furigana": "かみ", "arti": "Kertas" },
+
+  { "furigana": "はな", "arti": "Bunga" },
+  { "furigana": "シャツ", "arti": "Kemeja" },
+  { "furigana": "プレゼント", "arti": "Hadiah" },
+  { "furigana": "にもつ", "arti": "Barang bawaan" },
+  { "furigana": "おかね", "arti": "Uang" },
+  { "furigana": "きっぷ", "arti": "Karcis / tiket" },
+  { "furigana": "クリスマス", "arti": "Natal" },
+
+  { "furigana": "ちち", "arti": "Ayah (sendiri)" },
+  { "furigana": "はは", "arti": "Ibu (sendiri)" },
+  { "furigana": "おとうさん", "arti": "Ayah (sapaan)" },
+  { "furigana": "おかあさん", "arti": "Ibu (sapaan)" },
+
+  { "furigana": "もう", "arti": "Sudah" },
+  { "furigana": "まだ", "arti": "Belum" },
+  { "furigana": "これから", "arti": "Mulai sekarang" },
+
+  { "furigana": "いらっしゃい", "arti": "Selamat datang" },
+  { "furigana": "どうぞおあがりください", "arti": "Silakan masuk" },
+  { "furigana": "しつれいします", "arti": "Permisi" },
+  { "furigana": "いかがですか", "arti": "Bagaimana?" },
+  { "furigana": "いただきます", "arti": "Selamat makan (sebelum makan/minum)" },
+  { "furigana": "ごちそうさまでした", "arti": "Terima kasih atas makanannya" }
+]

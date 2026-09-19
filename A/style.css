@@ -1,0 +1,411 @@
+/* =========================================================
+   SOUMATOME — Main Dashboard (Sunny Glass & List Row Theme)
+   ========================================================= */
+
+:root {
+  --bg-gradient:          linear-gradient(135deg, #FFDC40 0%, #FFA800 100%);
+  --grid-line:            rgba(0, 0, 0, 0.08);
+
+  --glass-card-bg:        linear-gradient(135deg, #FFFFFF 0%, #F5F6FA 100%);
+  --glass-border:         rgba(255, 255, 255, 0.95);
+  --glass-shadow:         0 12px 32px -8px rgba(100, 60, 0, 0.18),
+                          0 1px 3px rgba(255, 255, 255, 0.8) inset;
+
+  --text-dark:            #0F172A;
+  --text-muted:           #64748B;
+
+  --accent-purple:        #6D28D9;
+  --progress-bg:          rgba(0, 0, 0, 0.1);
+  --vermillion:           #E11D48;
+
+  --radius-glass:         20px;
+  --ease-soft:            cubic-bezier(0.34, 1.25, 0.4, 1);
+}
+
+/* ── BASE RESET ── */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  font-family: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
+  color: var(--text-dark);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  background-color: #FFC93C;
+
+  /* Background full pattern */
+  background-image: 
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
+    var(--bg-gradient);
+  background-size: 40px 40px, 40px 40px, 100% 100%;
+  background-position: center;
+  background-attachment: fixed, fixed, fixed;
+}
+
+/* ── ANIMASI BUBBLE BACKGROUND ── */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.05));
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  pointer-events: none;
+  z-index: 0;
+  animation: floatBubbles 18s ease-in-out infinite alternate;
+}
+
+body::before {
+  width: 220px;
+  height: 220px;
+  top: 10%;
+  left: 8%;
+}
+
+body::after {
+  width: 340px;
+  height: 340px;
+  bottom: 5%;
+  right: 5%;
+  animation-delay: -7s;
+  animation-duration: 22s;
+}
+
+@keyframes floatBubbles {
+  0% { transform: translateY(0) scale(1) rotate(0deg); }
+  50% { transform: translateY(-35px) scale(1.08) rotate(180deg); }
+  100% { transform: translateY(20px) scale(0.95) rotate(360deg); }
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+*:focus-visible {
+  outline: 3px solid var(--accent-purple);
+  outline-offset: 3px;
+}
+
+/* ── APP SHELL ── */
+.app-shell {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── HEADBAR GLASS ── */
+.main-headbar {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1.5px solid var(--glass-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 8px 24px rgba(100, 60, 0, 0.08);
+}
+
+.headbar-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.brand-mark {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 18px;
+  font-weight: 900;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid var(--accent-purple);
+  color: var(--accent-purple);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  box-shadow: 0 4px 10px rgba(109, 40, 217, 0.2);
+}
+
+.brand-word {
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: 2px;
+  color: var(--text-dark);
+}
+
+.main-nav {
+  display: flex;
+  gap: 12px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: var(--text-muted);
+  font-weight: 700;
+  font-size: 14px;
+  padding: 8px 18px;
+  border-radius: 99px;
+  transition: all 0.25s ease;
+}
+
+.nav-link:hover, 
+.nav-link.active {
+  color: var(--accent-purple);
+  background: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(100, 60, 0, 0.12);
+}
+
+/* ── MAIN CONTENT & HERO ── */
+.main-content {
+  flex: 1;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: clamp(32px, 5vw, 48px) 24px 64px;
+}
+
+.hero-section {
+  position: relative;
+  background: var(--glass-card-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 2px solid var(--glass-border);
+  border-radius: var(--radius-glass);
+  padding: clamp(24px, 4vw, 36px) clamp(20px, 4vw, 36px);
+  margin-bottom: clamp(24px, 4vw, 32px);
+  box-shadow: var(--glass-shadow);
+  overflow: hidden;
+  text-align: left;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 45%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 100%);
+  pointer-events: none;
+  border-top-left-radius: var(--radius-glass);
+  border-top-right-radius: var(--radius-glass);
+  z-index: 1;
+}
+
+.hero-title,
+.hero-subtitle {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-title {
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  color: var(--text-dark);
+  font-weight: 800;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+
+.hero-subtitle {
+  color: var(--text-muted);
+  font-size: clamp(0.9rem, 2vw, 1.05rem);
+  font-weight: 600;
+}
+
+/* ── CHAPTER GRID (SEKARANG TAMPILAN MEMANJANG / LIST ROW) ── */
+.chapter-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── KARTU MEMANJANG (ROW CARD) ── */
+.chapter-card {
+  position: relative;
+  background: var(--glass-card-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 2px solid var(--glass-border);
+  border-radius: var(--radius-glass);
+  padding: 20px 28px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--glass-shadow);
+  overflow: hidden;
+  transition: all 0.3s var(--ease-soft);
+  text-decoration: none;
+}
+
+.chapter-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 100%);
+  pointer-events: none;
+  border-top-left-radius: var(--radius-glass);
+  border-top-right-radius: var(--radius-glass);
+}
+
+.chapter-card.active {
+  cursor: pointer;
+}
+
+/* Hover Effect: Menggeser sedikit ke kanan */
+.chapter-card.active:hover {
+  transform: translateX(8px);
+  box-shadow: 0 16px 36px -6px rgba(109, 40, 217, 0.22),
+              0 0 15px rgba(255, 255, 255, 0.9) inset;
+  border-color: #FFFFFF;
+}
+
+/* KONTEN DALAM KARTU (MEMANJANG KE SAMPING) */
+.card-left-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  z-index: 2;
+  flex: 1;
+}
+
+/* Indikator Bar Vertikal Kecil */
+.card-mini-bar {
+  width: 6px;
+  height: 38px;
+  background: var(--progress-bg);
+  border-radius: 99px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.card-mini-bar-fill {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, var(--accent-purple), var(--vermillion));
+  border-radius: 99px;
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #0F172A 0%, #334155 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+  margin: 0;
+  min-width: 90px;
+}
+
+.card-desc {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* Tombol Panah Kanan */
+.glass-action-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 1.5px solid var(--glass-border);
+  box-shadow: 0 6px 14px rgba(100, 60, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-purple);
+  z-index: 2;
+  transition: all 0.3s var(--ease-soft);
+  flex-shrink: 0;
+}
+
+.chapter-card.active:hover .glass-action-btn {
+  background: var(--accent-purple);
+  color: #FFFFFF;
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(109, 40, 217, 0.35);
+}
+
+/* ── FOOTER ── */
+.main-footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1.5px solid var(--glass-border);
+  padding: 24px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dark);
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.footer-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ── RESPONSIVE HP ── */
+@media (max-width: 600px) {
+  .headbar-container { padding: 12px 16px; }
+  .main-content { padding: 24px 16px 40px; }
+  
+  .chapter-card {
+    padding: 16px 20px;
+  }
+  
+  .card-left-content {
+    gap: 12px;
+  }
+
+  .card-title {
+    font-size: 1.25rem;
+    min-width: 70px;
+  }
+
+  .card-desc {
+    font-size: 0.9rem;
+  }
+
+  .glass-action-btn {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before, body::after { animation: none !important; }
+  .chapter-card, .glass-action-btn, .nav-link { transition: none !important; }
+  .chapter-card.active:hover { transform: none !important; }
+}

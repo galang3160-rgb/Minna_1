@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOUMATOME — Flashcard Kanji</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Zen+Maru+Gothic:wght@700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">猫</span>
+      <span class="brand-word">みんなの日本語</span>
+    </div>
+    <div class="progress">
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="progress-count" id="progressCount">1 / 40</div>
+    </div>
+  </header>
+
+  <main class="stage">
+
+    <button class="nav-btn nav-prev" id="prevBtn" aria-label="Kartu sebelumnya">
+      <svg viewBox="0 0 24 24" width="20" height="20"><path d="M15 4l-8 8 8 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+
+    <div class="card-stage" id="cardStage">
+      <div class="card-deck">
+        <div class="deck-peek deck-peek-2"></div>
+        <div class="deck-peek deck-peek-1"></div>
+
+        <div class="flashcard" id="flashcard" tabindex="0" role="button" aria-label="Balik kartu">
+          <div class="face face-front">
+            <span class="face-tag">Bahasa Indonesia</span>
+            <p class="arti-text" id="artiFront"></p>
+            <span class="flip-hint">tap kartu &nbsp;·&nbsp; atau tekan spasi</span>
+          </div>
+
+          <div class="face face-back">
+            <span class="face-tag face-tag-dark">日本語</span>
+            <p class="kanji-text" id="kanjiBack"></p>
+            <p class="furigana-text" id="furiganaBack"></p>
+            <div class="seal"></div>
+            <p class="arti-repeat" id="artiBack"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="nav-btn nav-next" id="nextBtn" aria-label="Kartu berikutnya">
+      <svg viewBox="0 0 24 24" width="20" height="20"><path d="M9 4l8 8-8 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+
+  </main>
+
+  <footer class="keys">
+    <div class="key-chip"><kbd>←</kbd><kbd>→</kbd><span>navigasi kartu</span></div>
+    <div class="key-chip"><kbd>space</kbd><span>balik kartu</span></div>
+  </footer>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
