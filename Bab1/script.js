@@ -1,5 +1,5 @@
 /* =========================================================
-   SOUMATOME — Flashcard Logic (Dynamic Fetch Data)
+   SOUMATOME — Flashcard Logic (Dynamic Fetch Data & Touch Support)
    ========================================================= */
 
 /* ── STATE ── */
@@ -8,8 +8,12 @@ let currentIndex = 0;
 let isFlipped = false;
 let isAnimating = false;
 
+/* Touch Swipe Variables */
+let touchStartX = 0;
+let touchStartY = 0;
+
 /* ── DOM REFS ── */
-const cardDeck       = document.getElementById('cardStage').querySelector('.card-deck');
+const cardDeck       = document.getElementById('cardStage')?.querySelector('.card-deck');
 const flashcard      = document.getElementById('flashcard');
 const artiFrontEl    = document.getElementById('artiFront');
 const furiganaBackEl = document.getElementById('furiganaBack');
@@ -43,16 +47,14 @@ function renderCard() {
   if (cards.length === 0) return;
   const c = cards[currentIndex];
 
-  artiFrontEl.textContent = c.arti || '';
-  if (furiganaBackEl) {
-    furiganaBackEl.textContent = c.furigana || '';
-  }
+  if (artiFrontEl) artiFrontEl.textContent = c.arti || '';
+  if (furiganaBackEl) furiganaBackEl.textContent = c.furigana || '';
 
-  progressCount.textContent = `${currentIndex + 1} / ${cards.length}`;
-  progressFill.style.width  = `${((currentIndex + 1) / cards.length) * 100}%`;
+  if (progressCount) progressCount.textContent = `${currentIndex + 1} / ${cards.length}`;
+  if (progressFill) progressFill.style.width  = `${((currentIndex + 1) / cards.length) * 100}%`;
 
-  prevBtn.disabled = currentIndex === 0;
-  nextBtn.disabled = currentIndex === cards.length - 1;
+  if (prevBtn) prevBtn.disabled = currentIndex === 0;
+  if (nextBtn) nextBtn.disabled = currentIndex === cards.length - 1;
 }
 
 /* ── FLIP ── */
@@ -62,7 +64,7 @@ function flipCard() {
   flashcard.classList.toggle('is-flipped', isFlipped);
 }
 
-/* ── NAVIGATION with slide animation ── */
+/* ── NAVIGATION with slide animation & safety fallback ── */
 function goTo(direction) {
   // direction: 1 = next, -1 = prev
   if (isAnimating || cards.length === 0) return;
@@ -76,30 +78,65 @@ function goTo(direction) {
   const outClass = direction === 1 ? 'sliding-next' : 'sliding-prev';
   const inClass  = direction === 1 ? 'entering-next' : 'entering-prev';
 
+  // Penanganan jika CSS animation dimatikan/diabaikan browser mobile
+  const supportsAnimation = window.getComputedStyle(flashcard).animationName !== 'none';
+
+  if (!supportsAnimation) {
+    currentIndex = target;
+    renderCard();
+    isAnimating = false;
+    return;
+  }
+
   cardDeck.classList.add(outClass);
 
-  const handleOutEnd = () => {
+  let fallbackTimeout;
+
+  const handleOutEnd = (e) => {
+    if (e && e.target !== flashcard) return;
     flashcard.removeEventListener('animationend', handleOutEnd);
+    clearTimeout(fallbackTimeout);
+
     cardDeck.classList.remove(outClass);
 
     currentIndex = target;
     renderCard();
 
     cardDeck.classList.add(inClass);
-    const handleInEnd = () => {
+
+    const handleInEnd = (eIn) => {
+      if (eIn && eIn.target !== flashcard) return;
       flashcard.removeEventListener('animationend', handleInEnd);
       cardDeck.classList.remove(inClass);
       isAnimating = false;
     };
+
     flashcard.addEventListener('animationend', handleInEnd);
+
+    // Timeout pengaman 500ms agar tombol tidak macet jika event lepas
+    setTimeout(() => {
+      cardDeck.classList.remove(inClass);
+      isAnimating = false;
+    }, 500);
   };
 
   flashcard.addEventListener('animationend', handleOutEnd);
+
+  // Timeout pengaman fase keluar
+  fallbackTimeout = setTimeout(() => {
+    flashcard.removeEventListener('animationend', handleOutEnd);
+    cardDeck.classList.remove(outClass);
+    currentIndex = target;
+    renderCard();
+    isAnimating = false;
+  }, 400);
 }
 
 /* ── BIND EVENTS ── */
 function bindEvents() {
+  // Event Klik & Keyboard
   flashcard.addEventListener('click', flipCard);
+  
   flashcard.addEventListener('keydown', (e) => {
     if (e.code === 'Enter' || e.code === 'Space') {
       e.preventDefault();
@@ -107,8 +144,19 @@ function bindEvents() {
     }
   });
 
-  prevBtn.addEventListener('click', () => goTo(-1));
-  nextBtn.addEventListener('click', () => goTo(1));
+  if (prevBtn) {
+    prevBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      goTo(-1);
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      goTo(1);
+    });
+  }
 
   document.addEventListener('keydown', (e) => {
     if (e.code === 'Space') {
@@ -122,6 +170,29 @@ function bindEvents() {
       goTo(1);
     }
   });
+
+  /* ── DUKUNGAN SWIPE SENTUHAN HP ── */
+  flashcard.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  flashcard.addEventListener('touchend', (e) => {
+    const touchEndX = e.changedTouches[0].screenX;
+    const touchEndY = e.changedTouches[0].screenY;
+    
+    const diffX = touchEndX - touchStartX;
+    const diffY = touchEndY - touchStartY;
+
+    // Deteksi jika pengguna melakukan swipe mendatar (bukan scroll halaman)
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 40) {
+      if (diffX < 0) {
+        goTo(1);  // Swipe ke kiri -> Next
+      } else {
+        goTo(-1); // Swipe ke kanan -> Prev
+      }
+    }
+  }, { passive: true });
 }
 
 /* ── INIT ── */
