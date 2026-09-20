@@ -413,10 +413,11 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 @media (max-width: 600px) {
   :root {
     --radius-card: 20px;
+    --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1); /* easing lembut untuk transisi kartu */
   }
 
-  .app { 
-    padding: 12px 12px 20px; 
+  .app {
+    padding: 12px 12px 20px;
   }
 
   .topbar {
@@ -429,28 +430,33 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   }
 
   /* Mengubah stage menjadi Grid 2 kolom di HP */
-  .stage { 
+  .stage {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Kolom kiri untuk Prev, kolom kanan untuk Next */
-    grid-template-rows: auto auto;  /* Baris 1: Kartu, Baris 2: Tombol */
-    gap: 20px 16px; 
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 20px 16px;
     width: 100%;
     align-items: center;
     justify-items: center;
   }
 
   /* Kartu berada di baris 1 & melebar penuh 2 kolom */
-  .card-stage { 
+  .card-stage {
     grid-column: 1 / -1;
     grid-row: 1;
-    width: 100%; 
-    max-width: 100%; 
+    width: 100%;
+    max-width: 100%;
+    perspective: 1200px; /* biar animasi 3D-ish kartu terasa lebih dalam */
   }
 
-  .card-deck { 
-    aspect-ratio: 4 / 3; 
-    max-height: 48vh; 
-    min-height: 260px;
+  /* Ukuran kartu adaptif: min di HP kecil, max di HP besar, mengikuti tinggi layar */
+  .card-deck {
+    aspect-ratio: 4 / 3;
+    height: clamp(220px, 42vh, 380px);
+    max-height: 48vh;
+    min-height: 220px;
+    width: min(100%, calc(clamp(220px, 42vh, 380px) * 4 / 3));
+    transition: transform 0.4s var(--ease-smooth);
   }
 
   /* Tombol Prev di Baris 2 (Bawah Kartu - Kiri) */
@@ -474,14 +480,71 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
     width: 54px;
     height: 54px;
     box-shadow: 0 6px 18px rgba(100, 60, 0, 0.18);
+    transition: transform 0.25s var(--ease-smooth), box-shadow 0.25s var(--ease-smooth);
+  }
+
+  .nav-btn:active {
+    transform: scale(0.9);
+    box-shadow: 0 3px 10px rgba(100, 60, 0, 0.22);
   }
 
   .keys { display: none; }
+
+  /* ── ANIMASI KARTU LEBIH SMOOTH DI MOBILE ── */
+  .flashcard {
+    transition: transform 0.5s var(--ease-smooth), opacity 0.4s var(--ease-smooth);
+    will-change: transform, opacity;
+  }
+
+  .card-deck.sliding-next .flashcard {
+    animation: slideOutNext 0.35s var(--ease-smooth) forwards;
+  }
+  .card-deck.sliding-prev .flashcard {
+    animation: slideOutPrev 0.35s var(--ease-smooth) forwards;
+  }
+  .card-deck.entering-next .flashcard {
+    animation: slideInNext 0.45s var(--ease-smooth) forwards;
+  }
+  .card-deck.entering-prev .flashcard {
+    animation: slideInPrev 0.45s var(--ease-smooth) forwards;
+  }
+
+  @keyframes slideOutNext {
+    to { transform: translateX(-30%) scale(0.92); opacity: 0; }
+  }
+  @keyframes slideOutPrev {
+    to { transform: translateX(30%) scale(0.92); opacity: 0; }
+  }
+  @keyframes slideInNext {
+    from { transform: translateX(30%) scale(0.92); opacity: 0; }
+    to { transform: translateX(0) scale(1); opacity: 1; }
+  }
+  @keyframes slideInPrev {
+    from { transform: translateX(-30%) scale(0.92); opacity: 0; }
+    to { transform: translateX(0) scale(1); opacity: 1; }
+  }
+}
+
+/* ── HP LAYAR KECIL (misal iPhone SE, dsb) ── */
+@media (max-width: 380px) {
+  .card-deck {
+    height: clamp(200px, 38vh, 300px);
+    min-height: 200px;
+  }
+
+  .nav-btn {
+    width: 46px;
+    height: 46px;
+  }
+
+  .brand-word {
+    font-size: 12px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   body::before, body::after { animation: none !important; }
-  .flashcard, .progress-fill { transition: none !important; }
+  .flashcard, .progress-fill, .nav-btn, .card-deck { transition: none !important; }
   .card-deck.sliding-next .flashcard,
   .card-deck.sliding-prev .flashcard,
   .card-deck.entering-next .flashcard,
