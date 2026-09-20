@@ -36,6 +36,7 @@ body {
   font-family: 'Plus Jakarta Sans', sans-serif;
   color: var(--text-dark);
   min-height: 100vh;
+  min-height: 100dvh;
   position: relative;
   background-color: #FFC93C;
   /* Grid & Background Gradient */
@@ -91,6 +92,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   position: relative;
   z-index: 1;
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -194,6 +196,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   display: flex; align-items: center; justify-content: center;
   transition: all .25s var(--ease-slide);
   box-shadow: 0 8px 20px rgba(100, 60, 0, 0.15);
+  z-index: 10;
 }
 .nav-btn svg {
   width: clamp(22px, 2.5vw, 28px);
@@ -207,6 +210,11 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .nav-btn:active:not(:disabled) { transform: scale(.92); }
 .nav-btn:disabled { opacity: .35; cursor: default; box-shadow: none; filter: grayscale(1); }
+
+/* Container Khusus Tombol Navigasi Mobile (Default Tersembunyi) */
+.mobile-controls {
+  display: none;
+}
 
 /* ── CARD DECK ── */
 .card-stage {
@@ -251,6 +259,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   cursor: pointer;
   transform-style: preserve-3d;
   transition: transform .65s var(--ease-flip);
+  -webkit-tap-highlight-color: transparent;
 }
 .flashcard.is-flipped { transform: rotateY(180deg); }
 
@@ -400,20 +409,72 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .card-deck { aspect-ratio: 4 / 3; }
 }
 
+/* ── KHUSUS TAMPILAN HP (MOBILE) ── */
 @media (max-width: 600px) {
-  .app { padding: 16px 14px 20px; }
-  .stage { flex-direction: column; gap: 16px; }
-  .card-stage { width: 100%; max-width: 100%; }
-  .card-deck { aspect-ratio: 1 / 1; max-height: none; }
-  
-  .nav-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 10;
+  :root {
+    --radius-card: 20px;
   }
-  .nav-prev { left: -10px; }
-  .nav-next { right: -10px; }
+
+  .app { 
+    padding: 12px 12px 20px; 
+  }
+
+  .topbar {
+    padding: 8px 14px;
+    gap: 10px;
+  }
+
+  .brand-word {
+    font-size: 13px;
+  }
+
+  /* Mengubah stage menjadi Grid 2 kolom di HP */
+  .stage { 
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Kolom kiri untuk Prev, kolom kanan untuk Next */
+    grid-template-rows: auto auto;  /* Baris 1: Kartu, Baris 2: Tombol */
+    gap: 20px 16px; 
+    width: 100%;
+    align-items: center;
+    justify-items: center;
+  }
+
+  /* Kartu berada di baris 1 & melebar penuh 2 kolom */
+  .card-stage { 
+    grid-column: 1 / -1;
+    grid-row: 1;
+    width: 100%; 
+    max-width: 100%; 
+  }
+
+  .card-deck { 
+    aspect-ratio: 4 / 3; 
+    max-height: 48vh; 
+    min-height: 260px;
+  }
+
+  /* Tombol Prev di Baris 2 (Bawah Kartu - Kiri) */
+  .nav-prev {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: end;
+    margin-right: 8px;
+  }
+
+  /* Tombol Next di Baris 2 (Bawah Kartu - Kanan) */
+  .nav-next {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: start;
+    margin-left: 8px;
+  }
+
+  .nav-btn {
+    position: static;
+    width: 54px;
+    height: 54px;
+    box-shadow: 0 6px 18px rgba(100, 60, 0, 0.18);
+  }
 
   .keys { display: none; }
 }
