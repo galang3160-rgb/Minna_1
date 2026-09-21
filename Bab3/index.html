@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOUMATOME — Flashcard Kanji</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Zen+Maru+Gothic:wght@700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOUMATOME — Flashcard Kanji</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Zen+Maru+Gothic:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -16,9 +16,9 @@
   <header class="topbar">
     <div class="brand">
       <span class="brand-mark">猫</span>
-      <span class="brand-word">SOUMATOME</span>
+      <span class="brand-word">みんなの日本語</span>
     </div>
-    <div class="progress">
+    <div class="progress" id="flashcardProgress">
       <div class="progress-track">
         <div class="progress-fill" id="progressFill"></div>
       </div>
@@ -26,45 +26,232 @@
     </div>
   </header>
 
-  <main class="stage">
-
-    <button class="nav-btn nav-prev" id="prevBtn" aria-label="Kartu sebelumnya">
-      <svg viewBox="0 0 24 24" width="20" height="20"><path d="M15 4l-8 8 8 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <!-- ── TOOLBAR AKSI: Acak & Latihan Soal ──
+       Belum ada JavaScript pada tahap ini. Tombol disiapkan dengan id,
+       data-action, dan atribut aria supaya siap dihubungkan ke JS berikutnya. -->
+  <nav class="toolbar" aria-label="Aksi flashcard">
+    <button
+      type="button"
+      id="shuffleBtn"
+      class="toolbar-btn btn-shuffle"
+      data-action="shuffle"
+      aria-label="Acak urutan kartu kosakata"
+    >
+      <svg class="toolbar-btn-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+        <path d="M17 3l4 4-4 4M3 7h9c2.5 0 4 1.5 5 3M17 21l4-4-4-4M21 17h-9c-2.5 0-4-1.5-5-3"
+              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="toolbar-btn-label">Acak</span>
     </button>
 
-    <div class="card-stage" id="cardStage">
-      <div class="card-deck">
-        <div class="deck-peek deck-peek-2"></div>
-        <div class="deck-peek deck-peek-1"></div>
+    <button
+      type="button"
+      id="practiceBtn"
+      class="toolbar-btn btn-practice"
+      data-action="open-practice"
+      aria-haspopup="true"
+      aria-expanded="false"
+      aria-controls="practiceView"
+    >
+      <svg class="toolbar-btn-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+        <path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"
+              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="toolbar-btn-label">Latihan Soal</span>
+    </button>
+  </nav>
 
-        <div class="flashcard" id="flashcard" tabindex="0" role="button" aria-label="Balik kartu">
-          <div class="face face-front">
-            <span class="face-tag">Bahasa Indonesia</span>
-            <p class="arti-text" id="artiFront"></p>
-            <span class="flip-hint">tap kartu &nbsp;·&nbsp; atau tekan spasi</span>
-          </div>
+  <!-- ── VIEW: FLASHCARD ──
+       Section utama yang sudah ada sebelumnya, dibungkus supaya bisa
+       ditampilkan/disembunyikan saat berpindah ke mode Latihan Soal. -->
+  <section
+    id="flashcardView"
+    class="view view-flashcard is-active"
+    aria-hidden="false"
+  >
+    <main class="stage">
 
-          <div class="face face-back">
-            <span class="face-tag face-tag-dark">日本語</span>
-            <p class="kanji-text" id="kanjiBack"></p>
-            <p class="furigana-text" id="furiganaBack"></p>
-            <div class="seal"></div>
-            <p class="arti-repeat" id="artiBack"></p>
+      <button class="nav-btn nav-prev" id="prevBtn" aria-label="Kartu sebelumnya">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path d="M15 4l-8 8 8 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+      <div class="card-stage" id="cardStage">
+        <div class="card-deck">
+          <div class="deck-peek deck-peek-2"></div>
+          <div class="deck-peek deck-peek-1"></div>
+
+          <div class="flashcard" id="flashcard" tabindex="0" role="button" aria-label="Balik kartu">
+            <div class="face face-front">
+              <span class="face-tag">Bahasa Indonesia</span>
+              <p class="arti-text" id="artiFront"></p>
+            </div>
+
+            <div class="face face-back">
+              <span class="face-tag face-tag-dark">日本語</span>
+              <p class="kanji-text" id="kanjiBack"></p>
+              <p class="furigana-text" id="furiganaBack"></p>
+              <div class="seal"></div>
+              <p class="arti-repeat" id="artiBack"></p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <button class="nav-btn nav-next" id="nextBtn" aria-label="Kartu berikutnya">
-      <svg viewBox="0 0 24 24" width="20" height="20"><path d="M9 4l8 8-8 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
+      <button class="nav-btn nav-next" id="nextBtn" aria-label="Kartu berikutnya">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path d="M9 4l8 8-8 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
 
-  </main>
+    </main>
 
-  <footer class="keys">
-    <div class="key-chip"><kbd>←</kbd><kbd>→</kbd><span>navigasi kartu</span></div>
-    <div class="key-chip"><kbd>space</kbd><span>balik kartu</span></div>
-  </footer>
+    <footer class="keys">
+      <div class="key-chip"><kbd>←</kbd><kbd>→</kbd><span>navigasi kartu</span></div>
+      <div class="key-chip"><kbd>space</kbd><span>balik kartu</span></div>
+    </footer>
+  </section>
+
+  <!-- ── VIEW: LATIHAN SOAL ──
+       Section baru untuk fitur latihan soal. Disembunyikan secara default
+       lewat atribut `hidden`; JS pada tahap berikutnya yang akan mengatur
+       perpindahan antar view serta mengisi konten soal secara dinamis. -->
+  <section
+    id="practiceView"
+    class="view view-practice"
+    aria-hidden="true"
+    aria-labelledby="practiceTitle"
+    hidden
+  >
+    <header class="practice-head">
+      <button
+        type="button"
+        id="practiceBackBtn"
+        class="toolbar-btn btn-back"
+        data-action="close-practice"
+        aria-label="Kembali ke flashcard"
+      >
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M15 4l-8 8 8 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="toolbar-btn-label">Kembali</span>
+      </button>
+
+      <h2 id="practiceTitle" class="practice-title">Latihan Soal</h2>
+
+      <div class="progress" id="practiceProgress">
+        <div class="progress-track">
+          <div class="progress-fill" id="practiceProgressFill"></div>
+        </div>
+        <div class="progress-count" id="practiceProgressCount">1 / 10</div>
+      </div>
+    </header>
+
+    <main class="practice-body" id="practiceBody">
+
+      <!-- ── PILIH JENIS LATIHAN ──
+           Tampil pertama saat masuk ke Latihan Soal. Pengguna memilih
+           antara Pilihan Ganda (fitur lama, tetap ada) atau Mengetik
+           (fitur baru) sebelum sesi soal dimulai. -->
+      <div class="practice-mode-select" id="practiceModeSelect">
+        <p class="practice-mode-title" id="practiceModeTitle">Pilih jenis latihan</p>
+        <div class="practice-mode-options">
+          <button
+            type="button"
+            id="practiceModeMcBtn"
+            class="toolbar-btn btn-mode"
+            data-mode="mc"
+          >
+            <svg class="toolbar-btn-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="toolbar-btn-label">Pilihan Ganda</span>
+          </button>
+
+          <button
+            type="button"
+            id="practiceModeTypeBtn"
+            class="toolbar-btn btn-mode"
+            data-mode="typing"
+          >
+            <svg class="toolbar-btn-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <path d="M4 20h16M4 16h10M4 12h16M4 8h10"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="toolbar-btn-label">Mengetik</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ── AREA SOAL ──
+           Membungkus elemen soal yang sudah ada (pertanyaan, pilihan ganda,
+           feedback, aksi) supaya bisa ditampilkan/disembunyikan sebagai satu
+           kelompok saat berpindah antara layar pilih-mode dan sesi soal.
+           Tidak ada id/class lama yang dihapus di dalamnya. -->
+      <div class="practice-quiz-area" id="practiceQuizArea" hidden>
+
+        <!-- Kartu pertanyaan latihan soal -->
+        <div class="practice-question" id="practiceQuestion">
+          <p class="practice-question-label" id="practiceQuestionLabel">Apa arti dari kata berikut?</p>
+          <p class="practice-question-text" id="practiceQuestionText">—</p>
+        </div>
+
+        <!-- Pilihan jawaban (mode Pilihan Ganda), diisi dinamis oleh JS -->
+        <div class="practice-options" id="practiceOptions" role="list" aria-label="Pilihan jawaban">
+          <button type="button" class="option-btn" data-option-index="0" role="listitem"></button>
+          <button type="button" class="option-btn" data-option-index="1" role="listitem"></button>
+          <button type="button" class="option-btn" data-option-index="2" role="listitem"></button>
+          <button type="button" class="option-btn" data-option-index="3" role="listitem"></button>
+        </div>
+
+        <!-- ── JAWABAN MENGETIK (mode baru) ──
+             Disembunyikan secara default; JS akan menampilkan salah satu
+             antara ini dan #practiceOptions sesuai mode yang dipilih. -->
+        <form class="practice-type-answer" id="practiceTypeAnswer" autocomplete="off" hidden>
+          <label class="practice-type-label" for="practiceTypeInput">Ketik jawabanmu</label>
+          <div class="practice-type-row">
+            <input
+              type="text"
+              id="practiceTypeInput"
+              name="practiceTypeInput"
+              class="practice-type-input"
+              placeholder="Tulis artinya di sini..."
+              autocapitalize="off"
+              autocorrect="off"
+              spellcheck="false"
+              aria-label="Ketik jawabanmu"
+            >
+            <button type="submit" id="practiceTypeSubmitBtn" class="toolbar-btn btn-submit-type">
+              Periksa
+            </button>
+          </div>
+        </form>
+
+        <!-- Feedback benar/salah -->
+        <p class="practice-feedback" id="practiceFeedback" role="status" aria-live="polite"></p>
+
+        <div class="practice-actions">
+          <button type="button" id="practiceSkipBtn" class="toolbar-btn btn-skip" data-action="skip-question">
+            Lewati
+          </button>
+          <button type="button" id="practiceNextBtn" class="toolbar-btn btn-next" data-action="next-question" disabled>
+            Soal Berikutnya
+          </button>
+        </div>
+      </div>
+
+      <!-- Ringkasan hasil di akhir sesi latihan, disembunyikan secara default -->
+      <div class="practice-result" id="practiceResult" hidden>
+        <h3 class="practice-result-title">Hasil Latihan</h3>
+        <p class="practice-result-score" id="practiceScoreText">0 / 0 benar</p>
+        <div class="practice-result-actions">
+          <button type="button" id="practiceRetryBtn" class="toolbar-btn btn-retry" data-action="retry-practice">
+            Ulangi Latihan
+          </button>
+          <button type="button" id="practiceExitBtn" class="toolbar-btn btn-exit" data-action="close-practice">
+            Kembali ke Flashcard
+          </button>
+        </div>
+      </div>
+
+    </main>
+  </section>
 
 </div>
 

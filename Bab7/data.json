@@ -41,12 +41,5 @@
 
   { "furigana": "もう", "arti": "Sudah" },
   { "furigana": "まだ", "arti": "Belum" },
-  { "furigana": "これから", "arti": "Mulai sekarang" },
-
-  { "furigana": "いらっしゃい", "arti": "Selamat datang" },
-  { "furigana": "どうぞおあがりください", "arti": "Silakan masuk" },
-  { "furigana": "しつれいします", "arti": "Permisi" },
-  { "furigana": "いかがですか", "arti": "Bagaimana?" },
-  { "furigana": "いただきます", "arti": "Selamat makan (sebelum makan/minum)" },
-  { "furigana": "ごちそうさまでした", "arti": "Terima kasih atas makanannya" }
+  { "furigana": "これから", "arti": "Mulai sekarang" }
 ]
